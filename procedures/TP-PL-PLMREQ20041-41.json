@@ -1,0 +1,202 @@
+{
+  "id": "PLM-TP-200-41",
+  "setup": [
+    {
+      "at": [
+        [
+          0,
+          0
+        ]
+      ],
+      "write": "Vehicle_Speed"
+    },
+    {
+      "at": [
+        [
+          0,
+          false
+        ]
+      ],
+      "write": "Liftgate_Switch_In"
+    },
+    {
+      "at": [
+        [
+          0,
+          false
+        ]
+      ],
+      "write": "Liftgate_Switch_Ext"
+    },
+    {
+      "at": [
+        [
+          0,
+          false
+        ]
+      ],
+      "write": "Kick_Detected"
+    },
+    {
+      "at": [
+        [
+          0,
+          false
+        ]
+      ],
+      "write": "Pinch_Strip"
+    },
+    {
+      "at": [
+        [
+          0,
+          "PRIMARY"
+        ]
+      ],
+      "write": "Latch_State"
+    }
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            2
+          ],
+          "expected": "STOP"
+        },
+        {
+          "op": "eq",
+          "signal": "Liftgate_Position",
+          "window": [
+            0,
+            2
+          ],
+          "expected": 0
+        }
+      ],
+      "description": "Simulate vehicle lock and confirm module enters sleep mode"
+    },
+    {
+      "id": "2",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Latch_Cmd",
+          "window": [
+            3,
+            3.1
+          ],
+          "expected": "RELEASE",
+          "tolerance": "T100ms"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              3,
+              true
+            ]
+          ],
+          "signal": "Liftgate_Switch_Ext"
+        }
+      ],
+      "description": "Activate exterior handle to wake module"
+    },
+    {
+      "id": "3",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            3.2,
+            4
+          ],
+          "expected": "OPENING"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              3.2,
+              "RELEASED"
+            ]
+          ],
+          "signal": "Latch_State"
+        }
+      ],
+      "description": "Verify module processes exterior handle request and initiates opening"
+    },
+    {
+      "id": "4",
+      "checks": [
+        {
+          "op": "always_eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            4,
+            33
+          ],
+          "expected": "OPENING"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              4,
+              false
+            ]
+          ],
+          "signal": "Liftgate_Switch_Ext"
+        }
+      ],
+      "description": "Verify module remains active for at least 30 seconds after wake"
+    },
+    {
+      "id": "5",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Fault",
+          "window": [
+            33,
+            34
+          ],
+          "expected": "0x00"
+        }
+      ],
+      "description": "Confirm no faults occurred during wake and operation"
+    }
+  ],
+  "product": "plms",
+  "teardown": [
+    {
+      "at": [
+        [
+          35,
+          false
+        ]
+      ],
+      "write": "Liftgate_Switch_Ext"
+    },
+    {
+      "at": [
+        [
+          35,
+          "PRIMARY"
+        ]
+      ],
+      "write": "Latch_State"
+    }
+  ],
+  "schema_version": "1.0",
+  "test_requirement_id": "PLM-TR-200-41"
+}
