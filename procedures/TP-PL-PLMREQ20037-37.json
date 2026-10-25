@@ -1,0 +1,170 @@
+{
+  "id": "PLM-TP-200-37",
+  "setup": [
+    {
+      "at": [
+        [
+          0,
+          0
+        ]
+      ],
+      "write": "Vehicle_Speed"
+    },
+    {
+      "at": [
+        [
+          0,
+          false
+        ]
+      ],
+      "write": "Pinch_Strip"
+    },
+    {
+      "at": [
+        [
+          0,
+          "RELEASED"
+        ]
+      ],
+      "write": "Latch_State"
+    },
+    {
+      "at": [
+        [
+          0,
+          false
+        ]
+      ],
+      "write": "Liftgate_Switch_In"
+    },
+    {
+      "at": [
+        [
+          0,
+          false
+        ]
+      ],
+      "write": "Liftgate_Switch_Ext"
+    },
+    {
+      "at": [
+        [
+          0,
+          false
+        ]
+      ],
+      "write": "Kick_Detected"
+    }
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "CLOSING"
+        },
+        {
+          "op": "eq",
+          "signal": "Spindle_Dir",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "CLOSE"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              true
+            ],
+            [
+              0.2,
+              false
+            ]
+          ],
+          "signal": "Liftgate_Switch_In"
+        }
+      ],
+      "description": "Initiate liftgate closing from partially open position"
+    },
+    {
+      "id": "2",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Position",
+          "window": [
+            0,
+            15
+          ],
+          "expected": 0
+        }
+      ],
+      "description": "Wait for liftgate to reach fully closed position (0%)"
+    },
+    {
+      "id": "3",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            0.5
+          ],
+          "expected": "STOP",
+          "tolerance": "T100ms"
+        }
+      ],
+      "description": "Verify that spindle motors stop when end of travel is reached"
+    },
+    {
+      "id": "4",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Latch_Cmd",
+          "window": [
+            0,
+            0.5
+          ],
+          "expected": "CINCH",
+          "tolerance": "T100ms"
+        }
+      ],
+      "description": "Verify that module commands latch to lock at fully closed position"
+    }
+  ],
+  "product": "plms",
+  "teardown": [
+    {
+      "at": [
+        [
+          0,
+          false
+        ]
+      ],
+      "write": "Liftgate_Switch_In"
+    },
+    {
+      "at": [
+        [
+          0,
+          false
+        ]
+      ],
+      "write": "Liftgate_Switch_Ext"
+    }
+  ],
+  "schema_version": "1.0",
+  "test_requirement_id": "PLM-TR-200-37"
+}
