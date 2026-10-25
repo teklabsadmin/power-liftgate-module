@@ -1,0 +1,281 @@
+{
+  "id": "PLM-TP-200-39",
+  "steps": [
+    {
+      "id": "1",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "OPENING"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              true
+            ]
+          ],
+          "signal": "Liftgate_Switch_In"
+        }
+      ],
+      "description": "Verify module is responsive to interior switch input while vehicle is awake"
+    },
+    {
+      "id": "2",
+      "checks": [
+        {
+          "op": "gt",
+          "signal": "Liftgate_Position",
+          "window": [
+            2,
+            4
+          ],
+          "expected": 20
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              false
+            ]
+          ],
+          "signal": "Liftgate_Switch_In"
+        }
+      ],
+      "description": "Reset interior switch and allow gate to reach partial open position"
+    },
+    {
+      "id": "3",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "STOP"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              true
+            ]
+          ],
+          "signal": "Liftgate_Switch_Ext"
+        }
+      ],
+      "description": "Verify module is responsive to exterior switch input while vehicle is awake"
+    },
+    {
+      "id": "4",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            2
+          ],
+          "expected": "STOP"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              false
+            ]
+          ],
+          "signal": "Liftgate_Switch_Ext"
+        }
+      ],
+      "description": "Reset exterior switch and verify module continues to respond"
+    },
+    {
+      "id": "5",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "OPENING"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              true
+            ]
+          ],
+          "signal": "Kick_Detected"
+        }
+      ],
+      "description": "Verify module is responsive to kick sensor input while vehicle is awake"
+    },
+    {
+      "id": "6",
+      "checks": [
+        {
+          "op": "gt",
+          "signal": "Liftgate_Position",
+          "window": [
+            1,
+            3
+          ],
+          "expected": 30
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              false
+            ]
+          ],
+          "signal": "Kick_Detected"
+        }
+      ],
+      "description": "Reset kick sensor and verify module remains responsive"
+    },
+    {
+      "id": "7",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "STOP"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              true
+            ]
+          ],
+          "signal": "Pinch_Strip"
+        }
+      ],
+      "description": "Verify module is responsive to pinch strip input while vehicle is awake"
+    },
+    {
+      "id": "8",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            2
+          ],
+          "expected": "STOP"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              false
+            ]
+          ],
+          "signal": "Pinch_Strip"
+        }
+      ],
+      "description": "Reset pinch strip and verify module continues operation"
+    },
+    {
+      "id": "9",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "CLOSING"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              true
+            ],
+            [
+              0.5,
+              false
+            ]
+          ],
+          "signal": "Liftgate_Switch_In"
+        }
+      ],
+      "description": "Command gate to close and verify module responds while vehicle is awake"
+    },
+    {
+      "id": "10",
+      "checks": [
+        {
+          "op": "lt",
+          "signal": "Liftgate_Position",
+          "window": [
+            3,
+            5
+          ],
+          "expected": 5
+        },
+        {
+          "op": "eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            3,
+            5
+          ],
+          "expected": "STOP"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              3,
+              "PRIMARY"
+            ]
+          ],
+          "signal": "Latch_State"
+        }
+      ],
+      "description": "Verify module remains responsive and completes closing operation"
+    }
+  ],
+  "product": "plms",
+  "schema_version": "1.0",
+  "test_requirement_id": "PLM-TR-200-39"
+}
