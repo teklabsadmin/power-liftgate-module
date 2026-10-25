@@ -1,0 +1,347 @@
+{
+  "id": "PLM-TP-200-46",
+  "steps": [
+    {
+      "id": "1",
+      "checks": [
+        {
+          "op": "always_eq",
+          "signal": "Glass_Hatch_Latch_Cmd",
+          "window": [
+            0,
+            5
+          ],
+          "expected": "NONE"
+        }
+      ],
+      "description": "With module operating and no input stimuli, verify module does not command glass hatch latch"
+    },
+    {
+      "id": "2",
+      "checks": [
+        {
+          "op": "always_eq",
+          "signal": "Glass_Hatch_Latch_Cmd",
+          "window": [
+            0,
+            3
+          ],
+          "expected": "NONE"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              true
+            ]
+          ],
+          "signal": "Liftgate_Switch_In"
+        }
+      ],
+      "description": "Activate interior liftgate switch and verify no glass hatch latch command is issued"
+    },
+    {
+      "id": "3",
+      "checks": [
+        {
+          "op": "always_eq",
+          "signal": "Glass_Hatch_Latch_Cmd",
+          "window": [
+            0,
+            2
+          ],
+          "expected": "NONE"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              false
+            ]
+          ],
+          "signal": "Liftgate_Switch_In"
+        }
+      ],
+      "description": "Deactivate interior switch and verify no glass hatch latch command"
+    },
+    {
+      "id": "4",
+      "checks": [
+        {
+          "op": "always_eq",
+          "signal": "Glass_Hatch_Latch_Cmd",
+          "window": [
+            0,
+            3
+          ],
+          "expected": "NONE"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              true
+            ]
+          ],
+          "signal": "Liftgate_Switch_Ext"
+        }
+      ],
+      "description": "Activate exterior handle switch and verify no glass hatch latch command is issued"
+    },
+    {
+      "id": "5",
+      "checks": [
+        {
+          "op": "always_eq",
+          "signal": "Glass_Hatch_Latch_Cmd",
+          "window": [
+            0,
+            2
+          ],
+          "expected": "NONE"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              false
+            ]
+          ],
+          "signal": "Liftgate_Switch_Ext"
+        }
+      ],
+      "description": "Deactivate exterior switch and verify no glass hatch latch command"
+    },
+    {
+      "id": "6",
+      "checks": [
+        {
+          "op": "always_eq",
+          "signal": "Glass_Hatch_Latch_Cmd",
+          "window": [
+            0,
+            3
+          ],
+          "expected": "NONE"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              true
+            ]
+          ],
+          "signal": "Kick_Detected"
+        }
+      ],
+      "description": "Trigger hands-free kick sensor and verify no glass hatch latch command is issued"
+    },
+    {
+      "id": "7",
+      "checks": [
+        {
+          "op": "always_eq",
+          "signal": "Glass_Hatch_Latch_Cmd",
+          "window": [
+            0,
+            2
+          ],
+          "expected": "NONE"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              false
+            ]
+          ],
+          "signal": "Kick_Detected"
+        }
+      ],
+      "description": "Clear kick sensor and verify no glass hatch latch command"
+    },
+    {
+      "id": "8",
+      "checks": [
+        {
+          "op": "always_eq",
+          "signal": "Glass_Hatch_Latch_Cmd",
+          "window": [
+            0,
+            4
+          ],
+          "expected": "NONE"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              "RELEASED"
+            ],
+            [
+              1,
+              "SECONDARY"
+            ],
+            [
+              2,
+              "PRIMARY"
+            ]
+          ],
+          "signal": "Latch_State"
+        }
+      ],
+      "description": "Cycle latch state through RELEASED, SECONDARY, and PRIMARY and verify no glass hatch latch command"
+    },
+    {
+      "id": "9",
+      "checks": [
+        {
+          "op": "always_eq",
+          "signal": "Glass_Hatch_Latch_Cmd",
+          "window": [
+            0,
+            3
+          ],
+          "expected": "NONE"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              true
+            ]
+          ],
+          "signal": "Pinch_Strip"
+        }
+      ],
+      "description": "Activate pinch strip and verify no glass hatch latch command is issued"
+    },
+    {
+      "id": "10",
+      "checks": [
+        {
+          "op": "always_eq",
+          "signal": "Glass_Hatch_Latch_Cmd",
+          "window": [
+            0,
+            2
+          ],
+          "expected": "NONE"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              false
+            ]
+          ],
+          "signal": "Pinch_Strip"
+        }
+      ],
+      "description": "Clear pinch strip and verify no glass hatch latch command"
+    },
+    {
+      "id": "11",
+      "checks": [
+        {
+          "op": "always_eq",
+          "signal": "Glass_Hatch_Latch_Cmd",
+          "window": [
+            0,
+            5
+          ],
+          "expected": "NONE"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              0
+            ],
+            [
+              1,
+              20
+            ],
+            [
+              2,
+              50
+            ],
+            [
+              3,
+              0
+            ]
+          ],
+          "signal": "Vehicle_Speed"
+        }
+      ],
+      "description": "Vary vehicle speed and verify no glass hatch latch command is issued during speed changes"
+    },
+    {
+      "id": "12",
+      "checks": [
+        {
+          "op": "always_eq",
+          "signal": "Glass_Hatch_Latch_Cmd",
+          "window": [
+            0,
+            4
+          ],
+          "expected": "NONE"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              true
+            ]
+          ],
+          "signal": "Liftgate_Switch_In"
+        },
+        {
+          "at": [
+            [
+              0.5,
+              "RELEASED"
+            ]
+          ],
+          "signal": "Latch_State"
+        },
+        {
+          "at": [
+            [
+              1,
+              10
+            ]
+          ],
+          "signal": "Vehicle_Speed"
+        }
+      ],
+      "description": "Combine multiple inputs and verify module continues to not command glass hatch latch"
+    }
+  ],
+  "product": "plms",
+  "schema_version": "1.0",
+  "test_requirement_id": "PLM-TR-200-46"
+}
