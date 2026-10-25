@@ -1,0 +1,191 @@
+{
+  "id": "PLM-TP-200-32",
+  "steps": [
+    {
+      "id": "1",
+      "checks": [
+        {
+          "op": "always_eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            2
+          ],
+          "expected": "STOP"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              10
+            ]
+          ],
+          "signal": "Vehicle_Speed"
+        }
+      ],
+      "description": "Set vehicle speed to 10 km/h to simulate vehicle in motion"
+    },
+    {
+      "id": "2",
+      "checks": [
+        {
+          "op": "always_eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            2
+          ],
+          "expected": "STOP"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              true
+            ]
+          ],
+          "signal": "Liftgate_Switch_In"
+        }
+      ],
+      "description": "Activate interior switch while vehicle is moving and verify spindle motors remain off"
+    },
+    {
+      "id": "3",
+      "checks": [
+        {
+          "op": "always_eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            2
+          ],
+          "expected": "STOP"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              false
+            ]
+          ],
+          "signal": "Liftgate_Switch_In"
+        },
+        {
+          "at": [
+            [
+              0.2,
+              true
+            ]
+          ],
+          "signal": "Liftgate_Switch_Ext"
+        }
+      ],
+      "description": "Deactivate interior switch and activate exterior switch while vehicle is moving"
+    },
+    {
+      "id": "4",
+      "checks": [
+        {
+          "op": "always_eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            2
+          ],
+          "expected": "STOP"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              false
+            ]
+          ],
+          "signal": "Liftgate_Switch_Ext"
+        },
+        {
+          "at": [
+            [
+              0.2,
+              true
+            ]
+          ],
+          "signal": "Kick_Detected"
+        }
+      ],
+      "description": "Deactivate exterior switch and trigger kick sensor while vehicle is moving"
+    },
+    {
+      "id": "5",
+      "checks": [
+        {
+          "op": "always_eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            2
+          ],
+          "expected": "STOP"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              false
+            ]
+          ],
+          "signal": "Kick_Detected"
+        },
+        {
+          "at": [
+            [
+              0.2,
+              50
+            ]
+          ],
+          "signal": "Vehicle_Speed"
+        }
+      ],
+      "description": "Increase vehicle speed to 50 km/h and verify spindle motors still off"
+    },
+    {
+      "id": "6",
+      "checks": [
+        {
+          "op": "always_eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            2
+          ],
+          "expected": "STOP"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              true
+            ]
+          ],
+          "signal": "Liftgate_Switch_In"
+        }
+      ],
+      "description": "Activate interior switch at high speed and verify no motion commanded"
+    }
+  ],
+  "product": "plms",
+  "schema_version": "1.0",
+  "test_requirement_id": "PLM-TR-200-32"
+}
