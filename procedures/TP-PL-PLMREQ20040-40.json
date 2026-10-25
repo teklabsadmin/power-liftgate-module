@@ -1,0 +1,65 @@
+{
+  "id": "PLM-PR-200-40",
+  "steps": [
+    {
+      "id": "1",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "OPENING"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              true
+            ]
+          ],
+          "signal": "Kick_Detected"
+        }
+      ],
+      "description": "Lock the vehicle and activate the kick sensor"
+    },
+    {
+      "id": "2",
+      "checks": [
+        {
+          "op": "always_eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            30
+          ],
+          "expected": "OPENING"
+        }
+      ],
+      "description": "Verify module remains active and processes kick sensor request for 30 seconds"
+    },
+    {
+      "id": "3",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Latch_Cmd",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "RELEASE",
+          "tolerance": "T100ms"
+        }
+      ],
+      "description": "Verify latch release command is issued"
+    }
+  ],
+  "product": "plms",
+  "schema_version": "1.0",
+  "test_requirement_id": "PLM-TR-200-40"
+}
