@@ -1,0 +1,123 @@
+{
+  "id": "PLM-TP-200-44",
+  "steps": [
+    {
+      "id": "1",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Fault",
+          "window": [
+            0,
+            2
+          ],
+          "expected": "0x00"
+        }
+      ],
+      "description": "Set battery voltage to lower boundary of operating range (9 V) and verify module operates correctly with no fault"
+    },
+    {
+      "id": "2",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Fault",
+          "window": [
+            0,
+            2
+          ],
+          "expected": "0x00"
+        }
+      ],
+      "description": "Set battery voltage to nominal (12 V) and verify module operates correctly with no fault"
+    },
+    {
+      "id": "3",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Fault",
+          "window": [
+            0,
+            2
+          ],
+          "expected": "0x00"
+        }
+      ],
+      "description": "Set battery voltage to upper boundary of operating range (16 V) and verify module operates correctly with no fault"
+    },
+    {
+      "id": "4",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "OPENING"
+        },
+        {
+          "op": "eq",
+          "signal": "Liftgate_Fault",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "0x00"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              true
+            ]
+          ],
+          "signal": "Liftgate_Switch_In"
+        }
+      ],
+      "description": "Trigger liftgate open command at 9 V battery voltage and verify module responds correctly"
+    },
+    {
+      "id": "5",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "OPENING"
+        },
+        {
+          "op": "eq",
+          "signal": "Liftgate_Fault",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "0x00"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              true
+            ]
+          ],
+          "signal": "Liftgate_Switch_In"
+        }
+      ],
+      "description": "Trigger liftgate open command at 16 V battery voltage and verify module responds correctly"
+    }
+  ],
+  "product": "plms",
+  "schema_version": "1.0",
+  "test_requirement_id": "PLM-TR-200-44"
+}
