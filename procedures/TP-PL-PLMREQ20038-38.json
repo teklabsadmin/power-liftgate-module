@@ -1,0 +1,268 @@
+{
+  "id": "PLM-TP-200-38",
+  "setup": [
+    {
+      "at": [
+        [
+          0,
+          0
+        ]
+      ],
+      "write": "Vehicle_Speed"
+    },
+    {
+      "at": [
+        [
+          0,
+          "PRIMARY"
+        ]
+      ],
+      "write": "Latch_State"
+    },
+    {
+      "at": [
+        [
+          0,
+          false
+        ]
+      ],
+      "write": "Liftgate_Switch_In"
+    },
+    {
+      "at": [
+        [
+          0,
+          false
+        ]
+      ],
+      "write": "Liftgate_Switch_Ext"
+    },
+    {
+      "at": [
+        [
+          0,
+          false
+        ]
+      ],
+      "write": "Kick_Detected"
+    },
+    {
+      "at": [
+        [
+          0,
+          false
+        ]
+      ],
+      "write": "Pinch_Strip"
+    }
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0.5,
+            2
+          ],
+          "expected": "OPENING"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              true
+            ],
+            [
+              0.5,
+              false
+            ]
+          ],
+          "signal": "Liftgate_Switch_In"
+        }
+      ],
+      "description": "Initiate liftgate opening by activating interior switch"
+    },
+    {
+      "id": "2",
+      "checks": [
+        {
+          "op": "gt",
+          "signal": "Liftgate_Position",
+          "window": [
+            0,
+            3
+          ],
+          "expected": 10
+        },
+        {
+          "op": "eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            3
+          ],
+          "expected": "OPENING"
+        }
+      ],
+      "description": "Verify liftgate is in motion opening"
+    },
+    {
+      "id": "3",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "STOP"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              true
+            ]
+          ],
+          "signal": "Pinch_Strip"
+        }
+      ],
+      "description": "Trigger obstacle detection via pinch strip during opening"
+    },
+    {
+      "id": "4",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            1.5,
+            3.5
+          ],
+          "expected": "CLOSING"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              false
+            ]
+          ],
+          "signal": "Pinch_Strip"
+        },
+        {
+          "at": [
+            [
+              1,
+              true
+            ],
+            [
+              1.5,
+              false
+            ]
+          ],
+          "signal": "Liftgate_Switch_In"
+        }
+      ],
+      "description": "Clear pinch strip and initiate liftgate closing"
+    },
+    {
+      "id": "5",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            2
+          ],
+          "expected": "CLOSING"
+        }
+      ],
+      "description": "Verify liftgate is in motion closing"
+    },
+    {
+      "id": "6",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "OPENING"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              true
+            ]
+          ],
+          "signal": "Pinch_Strip"
+        }
+      ],
+      "description": "Trigger obstacle detection via pinch strip during closing"
+    },
+    {
+      "id": "7",
+      "checks": [
+        {
+          "op": "always_eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            2
+          ],
+          "expected": "OPENING"
+        },
+        {
+          "op": "eq",
+          "signal": "Spindle_Dir",
+          "window": [
+            0,
+            2
+          ],
+          "expected": "OPEN"
+        }
+      ],
+      "description": "Verify liftgate reverses direction after obstacle detection"
+    }
+  ],
+  "product": "plms",
+  "teardown": [
+    {
+      "at": [
+        [
+          0,
+          false
+        ]
+      ],
+      "write": "Pinch_Strip"
+    },
+    {
+      "at": [
+        [
+          0,
+          false
+        ]
+      ],
+      "write": "Liftgate_Switch_In"
+    }
+  ],
+  "schema_version": "1.0",
+  "test_requirement_id": "PLM-TR-200-38"
+}
