@@ -1,0 +1,314 @@
+{
+  "id": "PLM-TP-200-35",
+  "steps": [
+    {
+      "id": "1",
+      "checks": [
+        {
+          "op": "in_range",
+          "signal": "Liftgate_Position",
+          "window": [
+            0,
+            1
+          ],
+          "expected": [
+            0,
+            5
+          ]
+        },
+        {
+          "op": "eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "STOP"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              false
+            ]
+          ],
+          "signal": "Liftgate_Switch_In"
+        },
+        {
+          "at": [
+            [
+              0,
+              false
+            ]
+          ],
+          "signal": "Liftgate_Switch_Ext"
+        },
+        {
+          "at": [
+            [
+              0,
+              false
+            ]
+          ],
+          "signal": "Kick_Detected"
+        },
+        {
+          "at": [
+            [
+              0,
+              0
+            ]
+          ],
+          "signal": "Vehicle_Speed"
+        },
+        {
+          "at": [
+            [
+              0,
+              false
+            ]
+          ],
+          "signal": "Pinch_Strip"
+        },
+        {
+          "at": [
+            [
+              0,
+              "PRIMARY"
+            ]
+          ],
+          "signal": "Latch_State"
+        }
+      ],
+      "description": "Initialize system with liftgate closed and latched"
+    },
+    {
+      "id": "2",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Latch_Cmd",
+          "window": [
+            0,
+            0.5
+          ],
+          "expected": "RELEASE",
+          "tolerance": "T100ms"
+        },
+        {
+          "op": "eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0.5,
+            1.5
+          ],
+          "expected": "OPENING"
+        },
+        {
+          "op": "eq",
+          "signal": "Spindle_Dir",
+          "window": [
+            0.5,
+            1.5
+          ],
+          "expected": "OPEN"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              true
+            ],
+            [
+              0.2,
+              false
+            ]
+          ],
+          "signal": "Liftgate_Switch_In"
+        }
+      ],
+      "description": "Trigger liftgate opening by pressing interior switch"
+    },
+    {
+      "id": "3",
+      "checks": [
+        {
+          "op": "always_eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            3
+          ],
+          "expected": "OPENING"
+        },
+        {
+          "op": "gt",
+          "signal": "Liftgate_Position",
+          "window": [
+            2,
+            3
+          ],
+          "expected": 30
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0.5,
+              "RELEASED"
+            ]
+          ],
+          "signal": "Latch_State"
+        }
+      ],
+      "description": "Wait for liftgate to reach mid-position during opening"
+    },
+    {
+      "id": "4",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "CLOSING",
+          "tolerance": "T100ms"
+        },
+        {
+          "op": "eq",
+          "signal": "Spindle_Dir",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "CLOSE",
+          "tolerance": "T100ms"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              true
+            ],
+            [
+              0.2,
+              false
+            ]
+          ],
+          "signal": "Liftgate_Switch_In"
+        }
+      ],
+      "description": "Issue reverse command by pressing interior switch during opening"
+    },
+    {
+      "id": "5",
+      "checks": [
+        {
+          "op": "always_eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            2
+          ],
+          "expected": "CLOSING"
+        },
+        {
+          "op": "always_eq",
+          "signal": "Spindle_Dir",
+          "window": [
+            0,
+            2
+          ],
+          "expected": "CLOSE"
+        }
+      ],
+      "description": "Verify liftgate continues closing motion"
+    },
+    {
+      "id": "6",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "OPENING",
+          "tolerance": "T100ms"
+        },
+        {
+          "op": "eq",
+          "signal": "Spindle_Dir",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "OPEN",
+          "tolerance": "T100ms"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              true
+            ],
+            [
+              0.2,
+              false
+            ]
+          ],
+          "signal": "Liftgate_Switch_In"
+        }
+      ],
+      "description": "Issue reverse command again by pressing interior switch during closing"
+    },
+    {
+      "id": "7",
+      "checks": [
+        {
+          "op": "always_eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            2
+          ],
+          "expected": "OPENING"
+        },
+        {
+          "op": "always_eq",
+          "signal": "Spindle_Dir",
+          "window": [
+            0,
+            2
+          ],
+          "expected": "OPEN"
+        },
+        {
+          "op": "eq",
+          "signal": "Liftgate_Fault",
+          "window": [
+            0,
+            2
+          ],
+          "expected": "0x00"
+        }
+      ],
+      "description": "Verify liftgate continues opening motion after second reversal"
+    }
+  ],
+  "product": "plms",
+  "schema_version": "1.0",
+  "test_requirement_id": "PLM-TR-200-35"
+}
