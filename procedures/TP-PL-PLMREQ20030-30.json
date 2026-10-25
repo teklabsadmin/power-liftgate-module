@@ -1,0 +1,227 @@
+{
+  "id": "PLM-TP-200-30",
+  "steps": [
+    {
+      "id": "1",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0.5,
+            1
+          ],
+          "expected": "STOP"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              10
+            ]
+          ],
+          "signal": "Vehicle_Speed"
+        },
+        {
+          "at": [
+            [
+              0,
+              "PRIMARY"
+            ]
+          ],
+          "signal": "Latch_State"
+        },
+        {
+          "at": [
+            [
+              0,
+              false
+            ]
+          ],
+          "signal": "Liftgate_Switch_In"
+        },
+        {
+          "at": [
+            [
+              0,
+              false
+            ]
+          ],
+          "signal": "Liftgate_Switch_Ext"
+        },
+        {
+          "at": [
+            [
+              0,
+              false
+            ]
+          ],
+          "signal": "Kick_Detected"
+        }
+      ],
+      "description": "Set vehicle speed above 0 km/h and verify system is idle"
+    },
+    {
+      "id": "2",
+      "checks": [
+        {
+          "op": "always_eq",
+          "signal": "Latch_Cmd",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "RELEASE"
+        },
+        {
+          "op": "always_eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "STOP"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              true
+            ],
+            [
+              0.5,
+              false
+            ]
+          ],
+          "signal": "Liftgate_Switch_In"
+        }
+      ],
+      "description": "Send interior switch request while speed > 0 and verify request is ignored"
+    },
+    {
+      "id": "3",
+      "checks": [
+        {
+          "op": "always_eq",
+          "signal": "Latch_Cmd",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "RELEASE"
+        },
+        {
+          "op": "always_eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "STOP"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              true
+            ],
+            [
+              0.5,
+              false
+            ]
+          ],
+          "signal": "Liftgate_Switch_Ext"
+        }
+      ],
+      "description": "Send exterior switch request while speed > 0 and verify request is ignored"
+    },
+    {
+      "id": "4",
+      "checks": [
+        {
+          "op": "always_eq",
+          "signal": "Latch_Cmd",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "RELEASE"
+        },
+        {
+          "op": "always_eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "STOP"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              true
+            ],
+            [
+              0.5,
+              false
+            ]
+          ],
+          "signal": "Kick_Detected"
+        }
+      ],
+      "description": "Send kick sensor request while speed > 0 and verify request is ignored"
+    },
+    {
+      "id": "5",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Latch_Cmd",
+          "window": [
+            0.5,
+            1.5
+          ],
+          "expected": "RELEASE",
+          "tolerance": "T100ms"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              0
+            ]
+          ],
+          "signal": "Vehicle_Speed"
+        },
+        {
+          "at": [
+            [
+              0.5,
+              true
+            ],
+            [
+              1,
+              false
+            ]
+          ],
+          "signal": "Liftgate_Switch_In"
+        }
+      ],
+      "description": "Set speed to 0 km/h and verify interior switch request is now accepted"
+    }
+  ],
+  "product": "plms",
+  "schema_version": "1.0",
+  "test_requirement_id": "PLM-TR-200-30"
+}
