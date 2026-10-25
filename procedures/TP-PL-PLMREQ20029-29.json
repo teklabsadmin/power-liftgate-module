@@ -1,0 +1,218 @@
+{
+  "id": "PLM-PR-200-29",
+  "setup": [
+    {
+      "at": [
+        [
+          0,
+          0
+        ]
+      ],
+      "write": "Vehicle_Speed"
+    },
+    {
+      "at": [
+        [
+          0,
+          false
+        ]
+      ],
+      "write": "Liftgate_Switch_In"
+    },
+    {
+      "at": [
+        [
+          0,
+          false
+        ]
+      ],
+      "write": "Liftgate_Switch_Ext"
+    },
+    {
+      "at": [
+        [
+          0,
+          false
+        ]
+      ],
+      "write": "Kick_Detected"
+    },
+    {
+      "at": [
+        [
+          0,
+          false
+        ]
+      ],
+      "write": "Pinch_Strip"
+    },
+    {
+      "at": [
+        [
+          0,
+          "PRIMARY"
+        ]
+      ],
+      "write": "Latch_State"
+    }
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Position",
+          "window": [
+            0,
+            1
+          ],
+          "expected": 0
+        },
+        {
+          "op": "eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "STOP"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              0
+            ]
+          ],
+          "signal": "Vehicle_Speed"
+        }
+      ],
+      "description": "Verify vehicle is stationary and liftgate is fully closed"
+    },
+    {
+      "id": "2",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Position",
+          "window": [
+            0,
+            0.5
+          ],
+          "expected": 0
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              true
+            ]
+          ],
+          "signal": "Kick_Detected"
+        }
+      ],
+      "description": "Simulate valid kick gesture detection"
+    },
+    {
+      "id": "3",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Latch_Cmd",
+          "window": [
+            0,
+            0.5
+          ],
+          "expected": "RELEASE",
+          "tolerance": "T100ms"
+        }
+      ],
+      "description": "Verify latch receives unlock command"
+    },
+    {
+      "id": "4",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Latch_Cmd",
+          "window": [
+            0,
+            0.5
+          ],
+          "expected": "RELEASE"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              "RELEASED"
+            ]
+          ],
+          "signal": "Latch_State"
+        }
+      ],
+      "description": "Release the latch to simulate unlock completion"
+    },
+    {
+      "id": "5",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Spindle_Dir",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "OPEN",
+          "tolerance": "T100ms"
+        },
+        {
+          "op": "eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "OPENING"
+        }
+      ],
+      "description": "Verify spindle motors receive open command and liftgate begins opening"
+    },
+    {
+      "id": "6",
+      "checks": [
+        {
+          "op": "gt",
+          "signal": "Liftgate_Position",
+          "window": [
+            1,
+            3
+          ],
+          "expected": 10
+        }
+      ],
+      "description": "Verify liftgate position increases as it opens"
+    }
+  ],
+  "product": "plms",
+  "teardown": [
+    {
+      "at": [
+        [
+          0,
+          false
+        ]
+      ],
+      "write": "Kick_Detected"
+    }
+  ],
+  "schema_version": "1.0",
+  "test_requirement_id": "PLM-TR-200-29"
+}
