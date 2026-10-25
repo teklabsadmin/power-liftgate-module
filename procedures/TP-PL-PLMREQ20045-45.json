@@ -1,0 +1,98 @@
+{
+  "id": "PLM-TP-200-45",
+  "steps": [
+    {
+      "id": "1",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Fault",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "0x00"
+        }
+      ],
+      "description": "Verify that the module can be physically positioned in the rear trim location without interference"
+    },
+    {
+      "id": "2",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Fault",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "0x00"
+        }
+      ],
+      "description": "Verify that all mounting points align with the designated rear trim mounting holes"
+    },
+    {
+      "id": "3",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Fault",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "0x00"
+        }
+      ],
+      "description": "Verify that mounting fasteners can be installed and torqued to specification without obstruction"
+    },
+    {
+      "id": "4",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Fault",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "0x00"
+        }
+      ],
+      "description": "Verify that the mounted module does not interfere with adjacent trim components or vehicle structure"
+    },
+    {
+      "id": "5",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Fault",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "0x00"
+        }
+      ],
+      "description": "Verify that electrical connectors are accessible and can be mated with the module in the mounted position"
+    },
+    {
+      "id": "6",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Fault",
+          "window": [
+            0,
+            1
+          ],
+          "expected": "0x00"
+        }
+      ],
+      "description": "Verify that the module is securely mounted with no excessive play or movement when force is applied"
+    }
+  ],
+  "product": "plms",
+  "schema_version": "1.0",
+  "test_requirement_id": "PLM-TR-200-45"
+}
