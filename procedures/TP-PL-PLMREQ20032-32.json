@@ -156,7 +156,7 @@
           "signal": "Vehicle_Speed"
         }
       ],
-      "description": "Increase vehicle speed to 50 km/h and verify spindle motors still off"
+      "description": "Deactivate kick sensor and increase vehicle speed to 50 km/h and verify spindle motors still off"
     },
     {
       "id": "6",
