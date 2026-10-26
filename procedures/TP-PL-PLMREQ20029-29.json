@@ -79,18 +79,7 @@
           "expected": "STOP"
         }
       ],
-      "writes": [
-        {
-          "at": [
-            [
-              0,
-              0
-            ]
-          ],
-          "signal": "Vehicle_Speed"
-        }
-      ],
-      "description": "Verify vehicle is stationary and liftgate is fully closed"
+      "description": "Verify liftgate is fully closed and stationary"
     },
     {
       "id": "2",
