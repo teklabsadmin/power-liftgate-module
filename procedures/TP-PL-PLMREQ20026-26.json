@@ -88,7 +88,7 @@
           "expected": "0x0000"
         }
       ],
-      "description": "Verify liftgate is fully closed with vehicle speed at 0 km/h"
+      "description": "Verify liftgate is fully closed with vehicle speed below 5 km/h"
     },
     {
       "id": "2",
