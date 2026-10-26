@@ -93,13 +93,13 @@
           "at": [
             [
               0,
-              30
+              5
             ]
           ],
           "signal": "Vehicle_Speed"
         }
       ],
-      "description": "Set vehicle speed above 0 km/h and verify liftgate remains closed"
+      "description": "Set vehicle speed to 5 km/h and verify liftgate remains closed"
     },
     {
       "id": "2",
@@ -143,7 +143,7 @@
           "signal": "Liftgate_Switch_In"
         }
       ],
-      "description": "Attempt to open via interior switch while moving - verify latch remains locked"
+      "description": "Attempt to open via interior switch while at 5 km/h - verify latch remains locked"
     },
     {
       "id": "3",
@@ -196,7 +196,7 @@
           "signal": "Liftgate_Switch_Ext"
         }
       ],
-      "description": "Attempt to open via exterior switch while moving - verify latch remains locked"
+      "description": "Attempt to open via exterior switch while at 5 km/h - verify latch remains locked"
     },
     {
       "id": "4",
@@ -249,7 +249,51 @@
           "signal": "Kick_Detected"
         }
       ],
-      "description": "Attempt to open via kick sensor while moving - verify latch remains locked"
+      "description": "Attempt to open via kick sensor while at 5 km/h - verify latch remains locked"
+    },
+    {
+      "id": "5",
+      "checks": [
+        {
+          "op": "always_eq",
+          "signal": "Liftgate_Position",
+          "window": [
+            0,
+            2
+          ],
+          "expected": 0
+        },
+        {
+          "op": "always_eq",
+          "signal": "Latch_Cmd",
+          "window": [
+            0,
+            2
+          ],
+          "expected": "CINCH"
+        },
+        {
+          "op": "always_eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            0,
+            2
+          ],
+          "expected": "STOP"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              30
+            ]
+          ],
+          "signal": "Vehicle_Speed"
+        }
+      ],
+      "description": "Set vehicle speed above 5 km/h and verify latch remains locked"
     }
   ],
   "product": "plms",
