@@ -75,13 +75,13 @@
           "at": [
             [
               0,
-              15
+              10
             ]
           ],
           "signal": "Vehicle_Speed"
         }
       ],
-      "description": "Set vehicle speed above 0 km/h to simulate rolling condition"
+      "description": "Set vehicle speed above 5 km/h to simulate rolling condition"
     },
     {
       "id": "2",
@@ -120,26 +120,78 @@
           "signal": "Liftgate_Switch_In"
         }
       ],
-      "description": "Send interior switch request while vehicle is rolling"
+      "description": "Send interior switch request while vehicle speed is above 5 km/h"
     },
     {
       "id": "3",
       "checks": [
         {
-          "op": "always_eq",
+          "op": "eq",
           "signal": "Liftgate_Motion",
           "window": [
             0,
-            3
+            0.5
           ],
-          "expected": "STOP"
+          "expected": "OPENING",
+          "tolerance": "T100ms"
         },
         {
-          "op": "always_eq",
+          "op": "eq",
+          "signal": "Latch_Cmd",
+          "window": [
+            0,
+            0.5
+          ],
+          "expected": "RELEASE",
+          "tolerance": "T100ms"
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              3
+            ]
+          ],
+          "signal": "Vehicle_Speed"
+        }
+      ],
+      "description": "Reduce vehicle speed below 5 km/h within 3 s window"
+    },
+    {
+      "id": "4",
+      "checks": [
+        {
+          "op": "gt",
           "signal": "Liftgate_Position",
           "window": [
             0,
             3
+          ],
+          "expected": 10
+        }
+      ],
+      "description": "Verify liftgate opens after request was held and speed dropped"
+    },
+    {
+      "id": "5",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            1,
+            2
+          ],
+          "expected": "STOP"
+        },
+        {
+          "op": "eq",
+          "signal": "Liftgate_Position",
+          "window": [
+            1,
+            2
           ],
           "expected": 0
         }
@@ -149,42 +201,25 @@
           "at": [
             [
               0,
-              0
+              "PRIMARY"
             ]
           ],
-          "signal": "Vehicle_Speed"
-        }
-      ],
-      "description": "Return vehicle speed to 0 km/h"
-    },
-    {
-      "id": "4",
-      "checks": [
-        {
-          "op": "eq",
-          "signal": "Liftgate_Motion",
-          "window": [
-            0,
-            1
-          ],
-          "expected": "STOP"
-        }
-      ],
-      "writes": [
+          "signal": "Latch_State"
+        },
         {
           "at": [
             [
-              0,
-              20
+              0.5,
+              12
             ]
           ],
           "signal": "Vehicle_Speed"
         }
       ],
-      "description": "Set vehicle speed above 0 km/h again for second test"
+      "description": "Return to initial conditions and set speed above 5 km/h for second test"
     },
     {
-      "id": "5",
+      "id": "6",
       "checks": [
         {
           "op": "always_eq",
@@ -220,42 +255,7 @@
           "signal": "Liftgate_Switch_Ext"
         }
       ],
-      "description": "Send exterior switch request while vehicle is rolling"
-    },
-    {
-      "id": "6",
-      "checks": [
-        {
-          "op": "always_eq",
-          "signal": "Liftgate_Motion",
-          "window": [
-            0,
-            3
-          ],
-          "expected": "STOP"
-        },
-        {
-          "op": "always_eq",
-          "signal": "Liftgate_Position",
-          "window": [
-            0,
-            3
-          ],
-          "expected": 0
-        }
-      ],
-      "writes": [
-        {
-          "at": [
-            [
-              0,
-              0
-            ]
-          ],
-          "signal": "Vehicle_Speed"
-        }
-      ],
-      "description": "Return vehicle speed to 0 km/h and verify no delayed execution"
+      "description": "Send exterior switch request while vehicle speed is above 5 km/h"
     },
     {
       "id": "7",
@@ -265,9 +265,20 @@
           "signal": "Liftgate_Motion",
           "window": [
             0,
-            1
+            0.5
           ],
-          "expected": "STOP"
+          "expected": "OPENING",
+          "tolerance": "T100ms"
+        },
+        {
+          "op": "eq",
+          "signal": "Latch_Cmd",
+          "window": [
+            0,
+            0.5
+          ],
+          "expected": "RELEASE",
+          "tolerance": "T100ms"
         }
       ],
       "writes": [
@@ -275,16 +286,75 @@
           "at": [
             [
               0,
-              10
+              4
             ]
           ],
           "signal": "Vehicle_Speed"
         }
       ],
-      "description": "Set vehicle speed above 0 km/h for kick sensor test"
+      "description": "Reduce vehicle speed below 5 km/h within 3 s window"
     },
     {
       "id": "8",
+      "checks": [
+        {
+          "op": "gt",
+          "signal": "Liftgate_Position",
+          "window": [
+            0,
+            3
+          ],
+          "expected": 10
+        }
+      ],
+      "description": "Verify liftgate opens after exterior request was held and speed dropped"
+    },
+    {
+      "id": "9",
+      "checks": [
+        {
+          "op": "eq",
+          "signal": "Liftgate_Motion",
+          "window": [
+            1,
+            2
+          ],
+          "expected": "STOP"
+        },
+        {
+          "op": "eq",
+          "signal": "Liftgate_Position",
+          "window": [
+            1,
+            2
+          ],
+          "expected": 0
+        }
+      ],
+      "writes": [
+        {
+          "at": [
+            [
+              0,
+              "PRIMARY"
+            ]
+          ],
+          "signal": "Latch_State"
+        },
+        {
+          "at": [
+            [
+              0.5,
+              8
+            ]
+          ],
+          "signal": "Vehicle_Speed"
+        }
+      ],
+      "description": "Return to initial conditions and set speed above 5 km/h for kick sensor test"
+    },
+    {
+      "id": "10",
       "checks": [
         {
           "op": "always_eq",
@@ -320,28 +390,30 @@
           "signal": "Kick_Detected"
         }
       ],
-      "description": "Send kick sensor request while vehicle is rolling"
+      "description": "Send kick sensor request while vehicle speed is above 5 km/h"
     },
     {
-      "id": "9",
+      "id": "11",
       "checks": [
         {
-          "op": "always_eq",
+          "op": "eq",
           "signal": "Liftgate_Motion",
           "window": [
             0,
-            3
+            0.5
           ],
-          "expected": "STOP"
+          "expected": "OPENING",
+          "tolerance": "T100ms"
         },
         {
-          "op": "always_eq",
-          "signal": "Liftgate_Position",
+          "op": "eq",
+          "signal": "Latch_Cmd",
           "window": [
             0,
-            3
+            0.5
           ],
-          "expected": 0
+          "expected": "RELEASE",
+          "tolerance": "T100ms"
         }
       ],
       "writes": [
@@ -349,13 +421,28 @@
           "at": [
             [
               0,
-              0
+              2
             ]
           ],
           "signal": "Vehicle_Speed"
         }
       ],
-      "description": "Return vehicle speed to 0 km/h and confirm discarded kick request is not executed"
+      "description": "Reduce vehicle speed below 5 km/h within 3 s window"
+    },
+    {
+      "id": "12",
+      "checks": [
+        {
+          "op": "gt",
+          "signal": "Liftgate_Position",
+          "window": [
+            0,
+            3
+          ],
+          "expected": 10
+        }
+      ],
+      "description": "Verify liftgate opens after kick request was held and speed dropped"
     }
   ],
   "product": "plms",
